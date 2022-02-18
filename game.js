@@ -10,6 +10,9 @@ window.addEventListener('load', () => {
     // const canvasWidth = window.innerWidth;
     // const canvasHeight = window.innerHeight;
     let enemies = []; // an empty array to push and hold the enemies
+    // scores
+    let score = 0;
+
 
     // General settings /////////////////////////////////////////////////////////////
 
@@ -68,6 +71,10 @@ window.addEventListener('load', () => {
             this.speed = 0;
             this.vy = 0;
             this.weight = 1; // gravity y movement => onGround
+            this.maxFrame = 8;
+            this.fps = 20;
+            this.frameTimer = 0;
+            this.frameInterval = 1000 / this.fps;
 
         }
         draw(ctx) {
@@ -75,7 +82,19 @@ window.addEventListener('load', () => {
             ctx.fillRect(this.x, this.y, this.width, this.height);
             ctx.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
         }
-        update(input) {
+        update(input, deltaTime) {
+            // dealing with sprite animation
+            if (this.frameTimer > this.frameInterval) {
+                if (this.frameX >= this.maxFrame) this.frameX = 0;
+                else this.frameX++;
+                this.frameTimer = 0;
+            } else {
+                this.frameTimer += deltaTime;
+            }
+            // end
+
+            // controls
+
             if (input.keys.indexOf('ArrowRight') > -1) {
                 this.speed = 5;
 
@@ -98,9 +117,11 @@ window.addEventListener('load', () => {
             this.y += this.vy;
             if (!this.onGround()) {
                 this.vy += this.weight;
+                this.maxFrame = 5;
                 this.frameY = 1;
             } else {
                 this.vy = 0;
+                this.maxFrame = 8;
                 this.frameY = 0;
             }
             if (this.y > canvasHeight - this.height) this.y = canvasHeight - this.height;
@@ -134,9 +155,7 @@ window.addEventListener('load', () => {
             this.x -= this.speed;
             if (this.x < 0 - this.width) this.x = 0;
         }
-
     }
-
     // Enemy  /////////////////////////////////////////////////////////////
 
     class Enemy {
@@ -150,57 +169,95 @@ window.addEventListener('load', () => {
             this.x = canvasWidth;
             this.y = canvasHeight - this.height;
             this.frameX = 0;
+            this.speed = 8;
+            this.maxFrame = 5;
+            this.fps = 20;
+            this.frameTimer = 0;
+            this.frameInterval = 1000 / this.fps;
+            this.removeEnemyFromArray = false;
         }
         draw(ctx) {
             ctx.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
 
         }
-        update() {
-            this.x--;
+        update(deltaTime) {
+            if (this.frameTimer > this.frameInterval) {
+                if (this.frameX >= this.maxFrame) this.frameX = 0;
+                else this.frameX++;
+                this.frameTimer = 0;
+            } else {
+                this.frameTimer += deltaTime;
+            }
+            this.x -= this.speed;
+            if (this.x < 0 - this.width) {
+                this.removeEnemyFromArray = true;
+                score++;
+            }
         }
-
     }
-    enemies.push(new Enemy(canvasWidth, canvasHeight));
 
-    function handleEnemies() {
-
+    function handleEnemies(deltaTime) {
+        if (enemyTimer > enemyInterval + randomEnemyInterval) {
+            enemies.push(new Enemy(canvasWidth, canvasHeight));
+            //console.log(enemies);
+            randomEnemyInterval = Math.random() * 1000 + 500;
+            enemyTimer = 0;
+        } else {
+            enemyTimer += deltaTime;
+        }
         enemies.forEach(enemy => {
             enemy.draw(ctx);
-            enemy.update();
+            enemy.update(deltaTime);
         });
+        enemies = enemies.filter(enemy => !enemy.removeEnemyFromArray);
     }
 
     // Text Display  /////////////////////////////////////////////////////////////
 
-    function displayStatusText() {
+    function displayStatusText(ctx) {
+        ctx.font = '48px monospace';
 
+        ctx.fillStyle = 'black';
+        ctx.fillText(`Score: ${score}`, 20, 50);
+
+        ctx.fillStyle = 'white';
+        ctx.fillText(`Score: ${score}`, 21, 51);
     }
-
     // instances of classes  /////////////////////////////////////////////////////////////
 
     const input = new InputHandler();
     const player = new Player(canvas.width, canvas.height);
-    const enemy1 = new Enemy(canvas.width, canvas.height);
     const background = new Background(canvasWidth, canvasHeight);
+
+    // dealing with the enemies loop time spf
+    let lastTime = 0;
+    let enemyTimer = 0;
+    let enemyInterval = 1000;
+    let randomEnemyInterval = Math.random() * 1000 + 500; // not sure yet?
 
 
     // Animation Loop - 60 time per second updating, re-drawing the game ) /////////////////////////////////////////////////////////////
 
-    function animate() {
-        ctx.fillStyle = 'transparent';
+    function animate(timeStamp) {
+        // how many time the computer can serve one animation frame e.g. 60 spf delta time around 60 ms.
+        const deltaTime = timeStamp - lastTime;
+        lastTime = timeStamp;
+        //console.log(deltaTime);
+        // end
+
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         background.draw(ctx);
-        background.update();
+        background.update(); // background animation
+        ctx.fillStyle = 'transparent';
         player.draw(ctx);
-        player.update(input);
+        player.update(input, deltaTime);
         // enemy1.draw(ctx);
         // enemy1.update();
-
-        handleEnemies();
-
+        handleEnemies(deltaTime);
+        displayStatusText(ctx);
         requestAnimationFrame(animate);
     }
-    animate();
+    animate(0);
 
 });
 
