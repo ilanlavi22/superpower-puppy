@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const canvasWidth = 800;
-    const canvasHeight = 500;
+    const canvasHeight = 450;
 
     // const canvasWidth = window.innerWidth;
     // const canvasHeight = window.innerHeight;
@@ -61,7 +61,7 @@ window.addEventListener('load', () => {
             this.canvasWidth = canvasHeight;
             this.canvasWidth = canvasHeight;
             this.width = 200; // sprite sheet image
-            this.height = 200;
+            this.height = 175;
             this.x = 10;
             this.y = canvasHeight - this.height - 10;
             this.image = new Image();
@@ -144,7 +144,7 @@ window.addEventListener('load', () => {
             this.x = 0;
             this.y = 0;
             this.width = 2400;
-            this.height = 500;
+            this.height = 450;
             this.speed = 4;
         }
         draw(ctx) {
@@ -162,10 +162,10 @@ window.addEventListener('load', () => {
         constructor(canvasWidth, canvasHeight) {
             this.canvasWidth = canvasWidth;
             this.canvasHeight - canvasHeight;
-            this.width = 160;
-            this.height = 119;
+            this.width = 110;
+            this.height = 100;
             this.image = new Image();
-            this.image.src = './images/enemy.png';
+            this.image.src = './images/enemy1.png';
             this.x = canvasWidth;
             this.y = canvasHeight - this.height;
             this.frameX = 0;
