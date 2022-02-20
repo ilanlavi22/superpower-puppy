@@ -12,6 +12,7 @@ window.addEventListener('load', () => {
     let enemies = []; // an empty array to push and hold the enemies
     // scores
     let score = 0;
+    let gameOver = false;
 
 
     // General settings /////////////////////////////////////////////////////////////
@@ -61,9 +62,9 @@ window.addEventListener('load', () => {
             this.canvasWidth = canvasHeight;
             this.canvasWidth = canvasHeight;
             this.width = 200; // sprite sheet image
-            this.height = 175;
-            this.x = 10;
-            this.y = canvasHeight - this.height - 10;
+            this.height = 200;
+            this.x = 0 - this.width;
+            this.y = canvasHeight - this.height;
             this.image = new Image();
             this.image.src = './images/puppy.png';
             this.frameX = 0;
@@ -76,13 +77,33 @@ window.addEventListener('load', () => {
             this.frameTimer = 0;
             this.frameInterval = 1000 / this.fps;
 
+
         }
         draw(ctx) {
             //ctx.fillStyle = 'white';
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 5;
+            //ctx.strokeRect(this.x, this.y, this.width, this.height);
+            ctx.beginPath();
+            ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 3, 0, Math.PI * 2);
+            ctx.stroke();
+            //ctx.strokeStyle = 'blue';
+            //ctx.beginPath();
+            //ctx.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
+            //ctx.stroke();
+            // ctx.fillRect(this.x, this.y, this.width, this.height);
             ctx.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
         }
-        update(input, deltaTime) {
+        update(input, deltaTime, enemies) {
+            // collision detection
+            enemies.forEach(enemy => {
+                const distanceX = (enemy.x + enemy.width / 2) - (this.x + this.width / 2);
+                const distanceY = (enemy.y + enemy.height / 2) - (this.y + this.height / 3);
+                const distance = Math.sqrt(distanceX * distanceX + distanceY + distanceY);
+                if (distance < enemy.width / 2 + this.width / 3) {
+                    gameOver = true;
+                }
+            });
             // dealing with sprite animation
             if (this.frameTimer > this.frameInterval) {
                 if (this.frameX >= this.maxFrame) this.frameX = 0;
@@ -102,7 +123,7 @@ window.addEventListener('load', () => {
                 this.speed = -5;
 
             } else if (input.keys.indexOf('ArrowUp') > -1 && this.onGround()) {
-                this.vy -= 23;
+                this.vy -= 20;
 
             } else {
                 this.speed = 0;
@@ -111,7 +132,7 @@ window.addEventListener('load', () => {
             // horizontal movement
             this.x += this.speed;
             if (this.x < 0) this.x = 0;
-            else if (this.x > canvasWidth - this.width) this.x = canvasWidth - this.width;
+            else if (this.x > canvasWidth - (this.width - 20)) this.x = canvasWidth - (this.width - 20);
 
             // vertical movement
             this.y += this.vy;
@@ -145,7 +166,7 @@ window.addEventListener('load', () => {
             this.y = 0;
             this.width = 2400;
             this.height = 450;
-            this.speed = 4;
+            this.speed = 5;
         }
         draw(ctx) {
             ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
@@ -167,7 +188,7 @@ window.addEventListener('load', () => {
             this.image = new Image();
             this.image.src = './images/enemy1.png';
             this.x = canvasWidth;
-            this.y = canvasHeight - this.height;
+            this.y = canvasHeight - this.height * 1;
             this.frameX = 0;
             this.speed = 8;
             this.maxFrame = 5;
@@ -177,6 +198,17 @@ window.addEventListener('load', () => {
             this.removeEnemyFromArray = false;
         }
         draw(ctx) {
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'white';
+            //ctx.strokeRect(this.x, this.y, this.width, this.height);
+            ctx.beginPath();
+            ctx.arc(this.x + this.width / 2, this.y + 20 + this.height / 2 - 20, this.width / 1.8, 0, Math.PI * 2);
+            ctx.stroke();
+            //ctx.strokeStyle = 'blue';
+            //ctx.beginPath();
+            //ctx.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
+            //ctx.stroke();
+            //ctx.strokeRect(this.x, this.y, this.width, this.height);
             ctx.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
 
         }
@@ -222,6 +254,13 @@ window.addEventListener('load', () => {
 
         ctx.fillStyle = 'white';
         ctx.fillText(`Score: ${score}`, 21, 51);
+        if (gameOver) {
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'black';
+            ctx.fillText('Game Over!', canvasWidth / 2, canvasHeight / 2);
+            ctx.fillStyle = 'white';
+            ctx.fillText('Game Over!', canvasWidth / 2 + 1, canvasHeight / 2 + 1);
+        }
     }
     // instances of classes  /////////////////////////////////////////////////////////////
 
@@ -250,12 +289,12 @@ window.addEventListener('load', () => {
         background.update(); // background animation
         ctx.fillStyle = 'transparent';
         player.draw(ctx);
-        player.update(input, deltaTime);
+        player.update(input, deltaTime, enemies);
         // enemy1.draw(ctx);
         // enemy1.update();
         handleEnemies(deltaTime);
         displayStatusText(ctx);
-        requestAnimationFrame(animate);
+        if (!gameOver) requestAnimationFrame(animate);
     }
     animate(0);
 
