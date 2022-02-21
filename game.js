@@ -76,10 +76,10 @@ window.addEventListener('load', () => {
 
             // collision detection
             enemies.forEach(enemy => {
-                const dx = (enemy.x + enemy.width / 2) - (this.x + this.width / 3);
-                const dy = (enemy.y + enemy.height / 2) - (this.y + this.height / 3);
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < enemy.width / 2 + this.width / 2) {
+                const distanceX = (enemy.x + enemy.width / 2) - (this.x + this.width / 3);
+                const distanceY = (enemy.y + enemy.height / 2) - (this.y + this.height / 3);
+                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                if (distance < enemy.width / 2.3 + this.width / 2.3) {
                     gameOver = true;
                 }
             });
@@ -162,7 +162,7 @@ window.addEventListener('load', () => {
             this.x = canvasWidth;
             this.y = canvasHeight - this.height;
             this.frameX = 0;
-            this.speed = 8;
+            this.speed = 10;
             this.maxFrame = 5;
             this.fps = 20;
             this.frameTimer = 0;
