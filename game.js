@@ -23,7 +23,7 @@ window.addEventListener('load', () => {
                     e.key === 'ArrowRight')
                     && this.keys.indexOf(e.key) === -1) {
                     this.keys.push(e.key);
-                }
+                } else if (e.key === 'Enter' && gameOver) restartGame();
             });
             window.addEventListener('keyup', e => {
                 if (
@@ -43,7 +43,7 @@ window.addEventListener('load', () => {
             this.canvasWidth = canvasHeight;
             this.width = 200;
             this.height = 200;
-            this.x = 0;
+            this.x = 10;
             this.y = canvasHeight - this.height;
             this.image = new Image();
             this.image.src = './images/puppy.png';
@@ -57,6 +57,12 @@ window.addEventListener('load', () => {
             this.vy = 0;
             this.weight = 1;
         }
+        restart() {
+            this.x = 10;
+            this.y = canvasHeight - this.height;
+            this.maxFrame = 8;
+            this.frameY = 0;
+        }
         draw(ctx) {
             // ctx.strokeStyle = 'white';
             // ctx.strokeRect(this.x, this.y, this.width, this.height);
@@ -67,7 +73,7 @@ window.addEventListener('load', () => {
             // ctx.strokeStyle = 'white';
             // ctx.lineWidth = 5;
             // ctx.beginPath();
-            // ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 3, 0, Math.PI * 2);
+            // ctx.arc(this.x + this.width / 2, this.y + this.height / 2 + 20, this.width / 3, 0, Math.PI * 2);
             // ctx.stroke();
 
             ctx.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y + 15, this.width, this.height);
@@ -76,10 +82,10 @@ window.addEventListener('load', () => {
 
             // collision detection
             enemies.forEach(enemy => {
-                const distanceX = (enemy.x + enemy.width / 2) - (this.x + this.width / 3);
-                const distanceY = (enemy.y + enemy.height / 2) - (this.y + this.height / 3);
+                const distanceX = (enemy.x + enemy.width / 2) - (this.x + this.width / 2);
+                const distanceY = ((enemy.y + 8) + (enemy.height / 2 * 0.9)) - (this.y + this.height / 2);
                 const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-                if (distance < enemy.width / 2.3 + this.width / 2.3) {
+                if (distance < (enemy.width / 2 * 0.9) + this.width / 3) {
                     gameOver = true;
                 }
             });
@@ -149,6 +155,9 @@ window.addEventListener('load', () => {
             this.x -= this.speed;
             if (this.x < 0 - this.width) this.x = 0;
         }
+        restart() {
+            this.x = 0;
+        }
     }
 
     class Enemy {
@@ -179,7 +188,7 @@ window.addEventListener('load', () => {
             // ctx.strokeStyle = 'white';
             // ctx.lineWidth = 5;
             // ctx.beginPath();
-            // ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+            // ctx.arc(this.x + this.width / 2 - 20, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
             // ctx.stroke();
 
             ctx.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y + 8, this.width * 0.9, this.height * 0.9);
@@ -217,7 +226,8 @@ window.addEventListener('load', () => {
 
 
     function displayStatusText(ctx) {
-        ctx.font = '48px monospace';
+        ctx.textAlign = 'left';
+        ctx.font = '35px monospace';
 
         ctx.fillStyle = 'black';
         ctx.fillText(`Score: ${score}`, 20, 50);
@@ -227,10 +237,21 @@ window.addEventListener('load', () => {
         if (gameOver) {
             ctx.textAlign = 'center';
             ctx.fillStyle = 'black';
-            ctx.fillText('Game Over!', canvasWidth / 2, canvasHeight / 2);
+            ctx.fillText('Game Over :-(', canvasWidth / 2, canvasHeight / 2);
+            ctx.fillText('Enter to restart...', canvasWidth / 2, (canvasHeight / 2) + 40);
             ctx.fillStyle = 'white';
-            ctx.fillText('Game Over!', canvasWidth / 2 + 1, canvasHeight / 2 + 1);
+            ctx.fillText('Game Over :-(', canvasWidth / 2 + 1, canvasHeight / 2 + 1);
+            ctx.fillText('Enter to restart...', canvasWidth / 2 + 1, (canvasHeight / 2 + 1) + 40);
+
         }
+    }
+    function restartGame() {
+        player.restart();
+        background.restart();
+        enemies = [];
+        score = 0;
+        gameOver = false;
+        animate(0);
     }
 
     const input = new InputHandler();
