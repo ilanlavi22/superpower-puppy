@@ -1,13 +1,15 @@
 SuperPower Puppy
 Vanilla JavaScript Canvas Game
 
-# Game Features:
+<ins>Game Features:</ins>
 
-- every 10 points the player scores the game level is going up.
-- indication for levels where level can be (favor of puppy):
+- Start Game => press enter.
 
-  - more worm are coming in / interval
-    - size of the worm can change
+- Every 10 points the player scores, the game level is going up.
+- Indication of levels where level can be (in favor of worm):
 
-- indication of level where level can be: (favor of worm)
-  - extra power for puppy
+  - More worm are coming in / interval / time.
+  - Size of the worm can change.
+
+- Indication of levels where level can be (in favor of puppy).
+  - Extra power (weapon) for puppy.
