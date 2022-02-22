@@ -9,7 +9,9 @@ Vanilla JavaScript Canvas Game
 - Indication of levels where level can be (in favor of worm):
 
   - More worm are coming in / interval / time.
-  - Size of the worm can change.
+  - Game speed / Scroll speed.
+  - Size of the worm can change??? not a good one :-(
 
-- Indication of levels where level can be (in favor of puppy).
+  - Indication of levels where level can be (in favor of puppy).
+  - Higher point score/rates e.g. 20+ points on higher level.
   - Extra power (weapon) for puppy.
