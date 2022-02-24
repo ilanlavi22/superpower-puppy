@@ -164,14 +164,14 @@ window.addEventListener('load', () => {
         constructor(canvasWidth, canvasHeight) {
             this.canvasWidth = canvasWidth;
             this.canvasHeight = canvasHeight;
-            this.width = 110;
-            this.height = 100;
+            this.width = 115;
+            this.height = 96;
             this.image = new Image();
-            this.image.src = './images/enemy1.png';
+            this.image.src = './images/worm.png';
             this.x = canvasWidth;
             this.y = canvasHeight - this.height;
             this.frameX = 0;
-            this.speed = 10;
+            this.speed = 11;
             this.maxFrame = 5;
             this.fps = 20;
             this.frameTimer = 0;
@@ -191,7 +191,7 @@ window.addEventListener('load', () => {
             // ctx.arc(this.x + this.width / 2 - 20, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
             // ctx.stroke();
 
-            ctx.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y + 8, this.width * 0.9, this.height * 0.9);
+            ctx.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
         }
         update(deltaTime) {
             if (this.frameTimer > this.frameInterval) {
@@ -275,7 +275,8 @@ window.addEventListener('load', () => {
         player.update(input, deltaTime, enemies);
         handleEnemies(deltaTime);
         displayStatusText(ctx);
-        if (!gameOver) requestAnimationFrame(animate);
+        //if (!gameOver) requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
     }
     animate(0);
 
