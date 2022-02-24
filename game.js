@@ -275,8 +275,8 @@ window.addEventListener('load', () => {
         player.update(input, deltaTime, enemies);
         handleEnemies(deltaTime);
         displayStatusText(ctx);
-        //if (!gameOver) requestAnimationFrame(animate);
-        requestAnimationFrame(animate);
+        if (!gameOver) requestAnimationFrame(animate);
+        //requestAnimationFrame(animate);
     }
     animate(0);
 

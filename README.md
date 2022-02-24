@@ -14,4 +14,4 @@ Vanilla JavaScript Canvas Game
 
   - Indication of levels where level can be (in favor of puppy).
   - Higher point score/rates e.g. 20+ points on higher level.
-  - Extra power (weapon) for puppy.
+  - Extra power (weapon) for puppy
