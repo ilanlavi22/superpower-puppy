@@ -2,15 +2,17 @@ window.addEventListener('load', () => {
 
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    const canvasWidth = 800;
+    const canvasWidth = 1000;
     const canvasHeight = 450;
 
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
 
     let enemies = [];
-    let score = 0;
+    let score = 1;
     let gameOver = false;
+    let gameLive = 4;
+    let gameLevel = 1;
 
     class InputHandler {
         constructor() {
@@ -41,6 +43,7 @@ window.addEventListener('load', () => {
         constructor(canvasWidth, canvasHeight) {
             this.canvasWidth = canvasWidth;
             this.canvasWidth = canvasHeight;
+            this.collisionCheck = true;
             this.width = 200;
             this.height = 200;
             this.x = 10;
@@ -60,6 +63,7 @@ window.addEventListener('load', () => {
         restart() {
             this.x = 10;
             this.y = canvasHeight - this.height;
+            gameLive = 4;
             this.maxFrame = 8;
             this.frameY = 0;
         }
@@ -79,14 +83,16 @@ window.addEventListener('load', () => {
             ctx.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y + 15, this.width, this.height);
         }
         update(input, deltaTime, enemies) {
-
+            //console.log(this.collisionCheck);
             // collision detection
             enemies.forEach(enemy => {
                 const distanceX = (enemy.x + enemy.width / 2) - (this.x + this.width / 2);
                 const distanceY = ((enemy.y + 8) + (enemy.height / 2 * 0.9)) - (this.y + this.height / 2);
                 const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-                if (distance < (enemy.width / 2 * 0.9) + this.width / 3) {
-                    gameOver = true;
+                if (distance < (enemy.width / 2 * 0.9) + this.width / 3 && this.collisionCheck) {
+                    gameLive--;
+                    this.handelCollisionCheck();
+                    if (gameLive === 0) { gameOver = true };
                 }
             });
 
@@ -132,7 +138,11 @@ window.addEventListener('load', () => {
         onGround() {
             return this.y >= canvasHeight - this.height;
         }
-
+        handelCollisionCheck() {
+            this.collisionCheck = false;
+            //console.log(this.gameLive);
+            setTimeout(() => this.collisionCheck = true, 500);
+        }
     }
 
     class Background {
@@ -205,6 +215,8 @@ window.addEventListener('load', () => {
             if (this.x < 0 - this.width) {
                 this.removeEnemyFromArray = true;
                 score++;
+                if (score % 10 === 0) gameLevel++;
+                console.log(gameLevel);
             }
         }
     }
@@ -212,7 +224,8 @@ window.addEventListener('load', () => {
     function handleEnemies(deltaTime) {
         if (enemyTimer > enemyInterval + randomEnemyInterval) {
             enemies.push(new Enemy(canvasWidth, canvasHeight));
-            randomEnemyInterval = Math.random() * 1000 + 500;
+            //randomEnemyInterval = Math.random() * 1000 + 500;
+            randomEnemyInterval = (Math.random() * 1000 + 500) - (300 * gameLevel);
             enemyTimer = 0;
         } else {
             enemyTimer += deltaTime;
@@ -242,8 +255,25 @@ window.addEventListener('load', () => {
             ctx.fillStyle = 'white';
             ctx.fillText('Game Over :-(', canvasWidth / 2 + 1, canvasHeight / 2 + 1);
             ctx.fillText('Enter to restart...', canvasWidth / 2 + 1, (canvasHeight / 2 + 1) + 40);
-
         }
+        ctx.textAlign = 'left';
+        ctx.font = '20px monospace';
+
+        ctx.fillStyle = 'black';
+        const cycleTxt = `Cycle: ${gameLive}`;
+        const cycleTextWidth = ctx.measureText(cycleTxt).width;
+        ctx.fillText(`${cycleTxt}`, canvasWidth - (cycleTextWidth + 20), 50);
+        ctx.fillStyle = 'white';
+        ctx.fillText(`${cycleTxt}`, canvasWidth - (cycleTextWidth + 20), 51);
+
+        ctx.textAlign = 'left';
+        ctx.font = '20px monospace';
+        ctx.fillStyle = 'black';
+        const levelTxt = `Level: ${gameLevel}`;
+        const levelTextWidth = ctx.measureText(levelTxt).width;
+        ctx.fillText(`${levelTxt}`, canvasWidth - (levelTextWidth + cycleTextWidth + 40), 50);
+        ctx.fillStyle = 'white';
+        ctx.fillText(`${levelTxt}`, canvasWidth - (levelTextWidth + cycleTextWidth + 40), 51);
     }
     function restartGame() {
         player.restart();
