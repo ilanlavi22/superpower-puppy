@@ -4,7 +4,7 @@
 
 ## Vanilla JavaScript Canvas Game
 
-[Link to Netlify.com] (https://superpower-puppy-game.netlify.app/)
+[Link to Netlify.com](https://superpower-puppy-game.netlify.app/)
 
 <ins>Game Features:</ins>
 
