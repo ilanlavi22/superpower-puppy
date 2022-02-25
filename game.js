@@ -1,8 +1,9 @@
+
 window.addEventListener('load', () => {
 
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    const canvasWidth = 1000;
+    const canvasWidth = 800;
     const canvasHeight = 450;
 
     canvas.width = canvasWidth;
@@ -13,6 +14,11 @@ window.addEventListener('load', () => {
     let gameOver = false;
     let gameLive = 4;
     let gameLevel = 1;
+    let showPopup = false;
+
+    //const dogBark = new Audio('/sounds/dog-bark.wav');
+
+
 
     class InputHandler {
         constructor() {
@@ -91,8 +97,12 @@ window.addEventListener('load', () => {
                 const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
                 if (distance < (enemy.width / 2 * 0.9) + this.width / 3 && this.collisionCheck) {
                     gameLive--;
+                    //dogBark.play();
                     this.handelCollisionCheck();
-                    if (gameLive === 0) { gameOver = true };
+                    if (gameLive === 0) {
+                        showPopup = false;
+                        gameOver = true;
+                    };
                 }
             });
 
@@ -140,8 +150,11 @@ window.addEventListener('load', () => {
         }
         handelCollisionCheck() {
             this.collisionCheck = false;
+            showPopup = true;
+            setTimeout(() => showPopup = false, 500);
             //console.log(this.gameLive);
-            setTimeout(() => this.collisionCheck = true, 500);
+            //popup(gameLive);
+            setTimeout(() => this.collisionCheck = true, 800);
         }
     }
 
@@ -216,11 +229,17 @@ window.addEventListener('load', () => {
                 this.removeEnemyFromArray = true;
                 score++;
                 if (score % 10 === 0) gameLevel++;
-                console.log(gameLevel);
+                //console.log(gameLevel);
             }
         }
     }
 
+    function popup() {
+        pump = new Image();
+        ctx.globalAlpha = 1;
+        pump.src = './images/Frame-1.png';
+        ctx.drawImage(pump, 100, 200, 100, 100);
+    }
     function handleEnemies(deltaTime) {
         if (enemyTimer > enemyInterval + randomEnemyInterval) {
             enemies.push(new Enemy(canvasWidth, canvasHeight));
@@ -260,7 +279,7 @@ window.addEventListener('load', () => {
         ctx.font = '20px monospace';
 
         ctx.fillStyle = 'black';
-        const cycleTxt = `Cycle: ${gameLive}`;
+        const cycleTxt = `Lives: ${gameLive}`;
         const cycleTextWidth = ctx.measureText(cycleTxt).width;
         ctx.fillText(`${cycleTxt}`, canvasWidth - (cycleTextWidth + 20), 50);
         ctx.fillStyle = 'white';
@@ -281,6 +300,8 @@ window.addEventListener('load', () => {
         enemies = [];
         score = 0;
         gameOver = false;
+        gameLive = 4;
+        gameLevel = 1;
         animate(0);
     }
 
@@ -297,12 +318,15 @@ window.addEventListener('load', () => {
     function animate(timeStamp) {
         const deltaTime = timeStamp - lastTime;
         lastTime = timeStamp;
-
+        ctx.globalAlpha = 1.0;
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         background.draw(ctx);
         background.update();
         player.draw(ctx);
         player.update(input, deltaTime, enemies);
+        if (showPopup) {
+            popup(gameLive);
+        }
         handleEnemies(deltaTime);
         displayStatusText(ctx);
         if (!gameOver) requestAnimationFrame(animate);
