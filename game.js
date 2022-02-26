@@ -16,8 +16,10 @@ window.addEventListener('load', () => {
     let gameLevel = 1;
     let showPopup = false;
 
-    const boomSound = new Audio('/sounds/boom.wav');
+
     const healingSound = new Audio('/sounds/healing.wav');
+    const forestSound = new Audio('/sounds/Forest_Ambience.mp3');
+    const boomSound = new Audio('/sounds/boom.wav');
 
 
 
@@ -86,7 +88,7 @@ window.addEventListener('load', () => {
             // ctx.beginPath();
             // ctx.arc(this.x + this.width / 2, this.y + this.height / 2 + 20, this.width / 3, 0, Math.PI * 2);
             // ctx.stroke();
-
+            forestSound.play();
             ctx.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y + 15, this.width, this.height);
         }
         update(input, deltaTime, enemies) {
@@ -100,10 +102,13 @@ window.addEventListener('load', () => {
                     gameLive--;
                     this.handelCollisionCheck();
                     if (gameLive === 0) {
-                        showPopup = false;
+                        showPopup = true;
                         gameOver = true;
+                        boomSound.src = '/sounds/boom.wav';
                         boomSound.play();
-                    };
+                    } else {
+                        boomSound.src = '/sounds/boom.wav';
+                    }
                 }
             });
 
@@ -152,6 +157,7 @@ window.addEventListener('load', () => {
         handelCollisionCheck() {
             this.collisionCheck = false;
             showPopup = true;
+            boomSound.play();
             setTimeout(() => showPopup = false, 500);
             //console.log(this.gameLive);
             //popup(gameLive);
@@ -242,6 +248,8 @@ window.addEventListener('load', () => {
         pump = new Image();
         pump.src = './images/Frame-1.png';
         ctx.drawImage(pump, 100, 200, 100, 100);
+        boomSound.play();
+
     }
     function handleEnemies(deltaTime) {
         if (enemyTimer > enemyInterval + randomEnemyInterval) {
@@ -296,6 +304,8 @@ window.addEventListener('load', () => {
         ctx.fillText(`${levelTxt}`, canvasWidth - (levelTextWidth + cycleTextWidth + 40), 50);
         ctx.fillStyle = 'white';
         ctx.fillText(`${levelTxt}`, canvasWidth - (levelTextWidth + cycleTextWidth + 40), 51);
+
+
     }
     function restartGame() {
         player.restart();
@@ -304,6 +314,7 @@ window.addEventListener('load', () => {
         enemies = [];
         score = 0;
         gameOver = false;
+        gameStart = true;
         gameLive = 4;
         gameLevel = 1;
         animate(0);
@@ -317,7 +328,6 @@ window.addEventListener('load', () => {
     let enemyTimer = 0;
     let enemyInterval = 1000;
     let randomEnemyInterval = Math.random() * 1000 + 500;
-
 
     function animate(timeStamp) {
         const deltaTime = timeStamp - lastTime;
