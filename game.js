@@ -16,7 +16,8 @@ window.addEventListener('load', () => {
     let gameLevel = 1;
     let showPopup = false;
 
-    //const dogBark = new Audio('/sounds/dog-bark.wav');
+    const boomSound = new Audio('/sounds/boom.wav');
+    const healingSound = new Audio('/sounds/healing.wav');
 
 
 
@@ -97,11 +98,11 @@ window.addEventListener('load', () => {
                 const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
                 if (distance < (enemy.width / 2 * 0.9) + this.width / 3 && this.collisionCheck) {
                     gameLive--;
-                    //dogBark.play();
                     this.handelCollisionCheck();
                     if (gameLive === 0) {
                         showPopup = false;
                         gameOver = true;
+                        boomSound.play();
                     };
                 }
             });
@@ -154,7 +155,7 @@ window.addEventListener('load', () => {
             setTimeout(() => showPopup = false, 500);
             //console.log(this.gameLive);
             //popup(gameLive);
-            setTimeout(() => this.collisionCheck = true, 800);
+            setTimeout(() => this.collisionCheck = true, 500);
         }
     }
 
@@ -228,7 +229,10 @@ window.addEventListener('load', () => {
             if (this.x < 0 - this.width) {
                 this.removeEnemyFromArray = true;
                 score++;
-                if (score % 10 === 0) gameLevel++;
+                if (score % 10 === 0) {
+                    gameLevel++;
+                    healingSound.play();
+                }
                 //console.log(gameLevel);
             }
         }
@@ -236,7 +240,6 @@ window.addEventListener('load', () => {
 
     function popup() {
         pump = new Image();
-        ctx.globalAlpha = 1;
         pump.src = './images/Frame-1.png';
         ctx.drawImage(pump, 100, 200, 100, 100);
     }
@@ -297,6 +300,7 @@ window.addEventListener('load', () => {
     function restartGame() {
         player.restart();
         background.restart();
+        healingSound.play();
         enemies = [];
         score = 0;
         gameOver = false;
@@ -318,7 +322,6 @@ window.addEventListener('load', () => {
     function animate(timeStamp) {
         const deltaTime = timeStamp - lastTime;
         lastTime = timeStamp;
-        ctx.globalAlpha = 1.0;
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         background.draw(ctx);
         background.update();
