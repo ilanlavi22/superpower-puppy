@@ -53,12 +53,12 @@ class Player {
                 if (gameLive === 0) {
                     showPopup = true;
                     gameOver = true;
-                    boomSound.src = '/sounds/wind.wav';
-                    boomSound.volume = 0.5;
-                    boomSound.play();
+                    overSound.src = '/sounds/game-over.wav';
+                    overSound.volume = 0.5;
+                    overSound.play();
                 } else {
-                    boomSound.volume = 0.5;
-                    boomSound.src = '/sounds/wind.wav';
+                    overSound.volume = 0.5;
+                    overSound.src = '/sounds/game-over.wav';
                 }
             }
         });
@@ -110,7 +110,7 @@ class Player {
         showPopup = true;
         startGame = true;
         boom = true;
-        boomSound.play();
+        //boomSound.play();
         setTimeout(() => showPopup = false, 500);
         setTimeout(() => boom = false, 500);
         //console.log(this.gameLive);

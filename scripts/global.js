@@ -21,4 +21,7 @@ let boom = false;
 
 const healingSound = new Audio('/sounds/healing.wav');
 const forestSound = new Audio('/sounds/Forest_Ambience.mp3');
-const boomSound = new Audio('/sounds/wind.wav');
+// const boomSound = new Audio('/sounds/wind.wav');
+const boomSound = new Audio('/sounds/hit.wav');
+const levelSound = new Audio('/sounds/level.wav');
+const overSound = new Audio('/sounds/game-over.wav');

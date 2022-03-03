@@ -43,9 +43,10 @@ class Enemy {
         if (this.x < 0 - this.width) {
             this.removeEnemyFromArray = true;
             if (!boom) score++;
-            else score--;
+            // else if (score > 0) score--;
+            // console.log(score);
 
-            if (score % 10 === 0) {
+            if (score % 10 === 0 && score > 0) {
                 gameLevel++;
                 healingSound.play();
             }
