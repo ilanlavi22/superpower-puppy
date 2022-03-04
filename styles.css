@@ -1,4 +1,9 @@
-@import url('http://fonts.cdnfonts.com/css/ds-marker-felt');
+@font-face {
+  font-family: 'DS Marker Felt';
+  font-style: normal;
+  font-weight: 400;
+  src: local('DS Marker Felt'), url('https://fonts.cdnfonts.com/s/53111/DSMarkerFelt.woff') format('woff');
+}
 
 * {
   margin: 0;
