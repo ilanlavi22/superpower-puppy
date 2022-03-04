@@ -1,3 +1,5 @@
+@import url('http://fonts.cdnfonts.com/css/ds-marker-felt');
+
 * {
   margin: 0;
   padding: 0;
@@ -9,13 +11,52 @@ body {
   height: 100%;
 }
 body {
+  font-family: 'DS Marker Felt', cursive, sans-serif;
+  font-weight: lighter;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-canvas {
-  /* display: none; */
-  margin: 3rem;
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1000px;
+  max-height: 450px;
+  margin: auto;
+  overflow: hidden;
+}
+canvas,
+#present {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -20%);
   max-width: 100%;
   max-height: 100%;
+}
+canvas {
+  top: 100%;
+  transform: translate(-50%, 0%);
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: all 1s ease;
+}
+#canvas.show {
+  top: 20%;
+  transform: translate(-50%, -20%);
+  opacity: 1;
+  z-index: 2;
+  pointer-events: all;
+}
+#present {
+  z-index: 1;
+  cursor: pointer;
+}
+#present img {
+  max-width: 100%;
+  height: auto;
 }

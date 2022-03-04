@@ -27,21 +27,9 @@ class Player {
         this.frameY = 0;
     }
     draw(ctx) {
-        // ctx.strokeStyle = 'white';
-        // ctx.strokeRect(this.x, this.y, this.width, this.height);
-        // ctx.beginPath();
-        // ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
-        // ctx.stroke();
-
-        // ctx.strokeStyle = 'white';
-        // ctx.lineWidth = 5;
-        // ctx.beginPath();
-        // ctx.arc(this.x + this.width / 2, this.y + this.height / 2 + 20, this.width / 3, 0, Math.PI * 2);
-        // ctx.stroke();
         ctx.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y + 15, this.width, this.height);
     }
     update(input, deltaTime, enemies) {
-        //console.log(this.collisionCheck);
         // collision detection
         enemies.forEach(enemy => {
             const distanceX = (enemy.x + enemy.width / 2) - (this.x + this.width / 2);
@@ -110,11 +98,8 @@ class Player {
         showPopup = true;
         startGame = true;
         boom = true;
-        //boomSound.play();
         setTimeout(() => showPopup = false, 500);
         setTimeout(() => boom = false, 500);
-        //console.log(this.gameLive);
-        //popup(gameLive);
         setTimeout(() => this.collisionCheck = true, 500);
     }
 }

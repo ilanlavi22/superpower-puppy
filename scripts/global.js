@@ -1,14 +1,11 @@
 const canvas = document.getElementById('canvas');
+const present = document.getElementById("present");
 const ctx = canvas.getContext('2d');
-const canvasWidth = 800;
+const canvasWidth = 1000;
 const canvasHeight = 450;
-
-
 
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
-
-
 
 let enemies = [];
 let score = 0;
@@ -18,6 +15,12 @@ let gameLevel = 1;
 let showPopup = false;
 let startGame = false;
 let boom = false;
+let isShow = false;
+
+present.addEventListener('click', function () {
+    canvas.classList.add("show");
+    isShow = true;
+});
 
 const healingSound = new Audio('/sounds/healing.wav');
 const forestSound = new Audio('/sounds/Forest_Ambience.mp3');

@@ -13,7 +13,7 @@ window.addEventListener('load', () => {
                     e.key === 'ArrowRight')
                     && this.keys.indexOf(e.key) === -1) {
                     this.keys.push(e.key);
-                } else if (e.key === 'Enter' && gameOver) restartGame();
+                } else if (e.key === 'Enter' && gameOver && isShow) restartGame();
             });
             window.addEventListener('keyup', e => {
                 if (
@@ -27,7 +27,6 @@ window.addEventListener('load', () => {
         }
     }
 
-
     function popup() {
         pump = new Image();
         pump.src = './images/Frame-1.png';
@@ -38,7 +37,6 @@ window.addEventListener('load', () => {
     function handleEnemies(deltaTime) {
         if (enemyTimer > enemyInterval + randomEnemyInterval) {
             enemies.push(new Enemy(canvasWidth, canvasHeight));
-            //randomEnemyInterval = Math.random() * 1000 + 500;
             randomEnemyInterval = (Math.random() * 1000 + 500) - (300 * gameLevel);
             enemyTimer = 0;
         } else {
@@ -51,10 +49,9 @@ window.addEventListener('load', () => {
         enemies = enemies.filter(enemy => !enemy.removeEnemyFromArray);
     }
 
-
     function displayStatusText(ctx) {
         ctx.textAlign = 'left';
-        ctx.font = '35px monospace';
+        ctx.font = '45px DS Marker Felt';
 
         ctx.fillStyle = 'black';
         ctx.fillText(`Score: ${score}`, 20, 50);
@@ -71,7 +68,7 @@ window.addEventListener('load', () => {
             ctx.fillText(`${!startGame ? 'Enter to start...' : 'Enter to Restart'}`, canvasWidth / 2 + 1, (canvasHeight / 2 + 1) + 40);
         }
         ctx.textAlign = 'left';
-        ctx.font = '20px monospace';
+        ctx.font = '25px DS Marker Felt';
 
         ctx.fillStyle = 'black';
         const cycleTxt = `Lives: ${gameLive}`;
@@ -81,7 +78,7 @@ window.addEventListener('load', () => {
         ctx.fillText(`${cycleTxt}`, canvasWidth - (cycleTextWidth + 20), 51);
 
         ctx.textAlign = 'left';
-        ctx.font = '20px monospace';
+        ctx.font = '25px DS Marker Felt';
         ctx.fillStyle = 'black';
         const levelTxt = `Level: ${gameLevel}`;
         const levelTextWidth = ctx.measureText(levelTxt).width;
@@ -126,13 +123,8 @@ window.addEventListener('load', () => {
         handleEnemies(deltaTime);
         displayStatusText(ctx);
         if (!gameOver) requestAnimationFrame(animate);
-
-        //requestAnimationFrame(animate);
     }
     animate(0);
-
 });
-
-
 
 

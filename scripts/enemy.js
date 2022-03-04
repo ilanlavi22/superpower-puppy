@@ -17,18 +17,6 @@ class Enemy {
         this.removeEnemyFromArray = false;
     }
     draw(ctx) {
-        // ctx.strokeStyle = 'white';
-        // ctx.strokeRect(this.x, this.y, this.width, this.height);
-        // ctx.beginPath();
-        // ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
-        // ctx.stroke();
-
-        // ctx.strokeStyle = 'white';
-        // ctx.lineWidth = 5;
-        // ctx.beginPath();
-        // ctx.arc(this.x + this.width / 2 - 20, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
-        // ctx.stroke();
-
         ctx.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
     update(deltaTime) {
@@ -43,14 +31,11 @@ class Enemy {
         if (this.x < 0 - this.width) {
             this.removeEnemyFromArray = true;
             if (!boom) score++;
-            // else if (score > 0) score--;
-            // console.log(score);
 
             if (score % 10 === 0 && score > 0) {
                 gameLevel++;
                 healingSound.play();
             }
-            //console.log(gameLevel);
         }
     }
 }
