@@ -8,8 +8,12 @@
 
 <ins>Game Features:</ins>
 
-- Start Game => press enter.
+Game Lives – 4
+Game Level – As long as you go!
+Every 10 points your level increases ... more speed more worms to save.
 
-- Game Over, every 4 hits (collision).
-- Every 10 points, the game level is going up, worms are coming in faster (interval).
-- Game speed / Scroll speed?
+<ins>Developing that game was a learning curve, I have strengthened:</ins>
+
+- Object Oriented Programming (OOP) - Classes and Methods
+- Function Parameters and Argument
+- Array Prototype and Methods
