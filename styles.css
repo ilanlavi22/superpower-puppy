@@ -25,6 +25,7 @@ body {
 .container {
   position: relative;
   width: 100%;
+  height: 100%;
   max-width: 1000px;
   max-height: 450px;
   margin: auto;
@@ -33,7 +34,6 @@ body {
 canvas,
 #present {
   width: 100%;
-  height: 100%;
   position: absolute;
   top: 20%;
   left: 50%;
